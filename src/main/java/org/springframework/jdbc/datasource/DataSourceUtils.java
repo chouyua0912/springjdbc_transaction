@@ -116,7 +116,7 @@ public abstract class DataSourceUtils {
             // Thread-bound object will get removed by synchronization at transaction completion.
             ConnectionHolder holderToUse = conHolder;
             if (holderToUse == null) {
-                holderToUse = new ConnectionHolder(con);
+                holderToUse = new ConnectionHolder(con);    // 创建出来默认是 transactionActive = false;
             }
             else {
                 holderToUse.setConnection(con);

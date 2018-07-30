@@ -11,9 +11,10 @@ public class TransactionDemo {
         JdbcTemplate jdbc = context.getBean(JdbcTemplate.class);
 
         TransactionUpdate1 update1 = context.getBean(TransactionUpdate1.class);
-        //   execute(() -> update1.insert1());
-        //   execute(() -> update1.insert1_1());
-        execute(() -> update1.insert2());
+        //  execute(() -> update1.insert1());
+        //  execute(() -> update1.insert1_1());
+        //  execute(() -> update1.insert2());
+        execute(() -> update1.insert3());
 
         jdbc.query("select * from jdbc", rs -> {
             System.out.println(rs.getInt(1) + " " + rs.getString(2));

@@ -28,7 +28,7 @@ public class TransactionUpdate1 {
 
     // JdbcTemplate will get connection from datasource directly, and has no automatic transaction control
     public void insert1() {
-        jdbc.execute("insert into jdbc (name) values ('out_insert1')");
+        jdbcTemplate.execute("insert into jdbc (name) values ('out_insert1')");
 
         update2.insert1();
 
@@ -49,7 +49,7 @@ public class TransactionUpdate1 {
      */
     @Transactional
     public void insert1_1() {
-        jdbc.execute("insert into jdbc (name) values ('out_insert1_1')");
+        jdbcTemplate.execute("insert into jdbc (name) values ('outer_insert1_1')");
 
         update2.insert1_1();    // 方法内部同样使用jdbc.execute
         // 由于默认的传播规则，会获取到绑定在线程上的conn，从而实现了事务的传播。 调用方出现故障跑出异常通知 TransactionAspectSupport 后， 被调用的数据插入同样会被回滚掉
@@ -60,15 +60,22 @@ public class TransactionUpdate1 {
     @Transactional
     public void insert2() {
         transactionTemplate.execute(status -> {
-            jdbc.execute("insert into jdbc (name) values ('out_insert2')");
+            jdbcTemplate.execute("insert into jdbc (name) values ('outer_insert2')");
             return status;
         });
 
         update2.insert2();
     }
 
+    @Transactional
+    public void insert3() {
+        jdbcTemplate.execute("insert into jdbc (name) values ('outer_insert3')");
+
+        update2.insert3();
+    }
+
     @Resource
-    private JdbcTemplate jdbc;
+    private JdbcTemplate jdbcTemplate;
     @Resource
     private TransactionTemplate transactionTemplate;
     @Resource

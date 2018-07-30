@@ -581,7 +581,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
                 Object suspendedResources = null;
                 if (transaction != null) {
                     suspendedResources = doSuspend(transaction);
-                }
+                }   // 获取前次绑定的事务对象Transaction的属性，记录到 SuspendedResourcesHolder 以便恢复
                 String name = TransactionSynchronizationManager.getCurrentTransactionName();
                 TransactionSynchronizationManager.setCurrentTransactionName(null);
                 boolean readOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
