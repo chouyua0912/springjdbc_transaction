@@ -543,7 +543,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
                             definition.getIsolationLevel() : null);
             TransactionSynchronizationManager.setCurrentTransactionReadOnly(definition.isReadOnly());
             TransactionSynchronizationManager.setCurrentTransactionName(definition.getName());
-            TransactionSynchronizationManager.initSynchronization();
+            TransactionSynchronizationManager.initSynchronization();    // 初始化同步器队列
         }
     }
 

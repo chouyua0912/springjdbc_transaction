@@ -12,3 +12,11 @@ create table `jdbc` (
 
 insert into jdbc (name) values ('zhang');
 select * from jdbc;
+
+
+create table user_info (
+  id INT primary key,
+  name varchar(128),
+  address varchar(256),
+  phone varchar(128)
+)

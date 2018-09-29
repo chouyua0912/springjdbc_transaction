@@ -165,7 +165,7 @@ public abstract class TransactionSynchronizationManager {
     }
 
     /**
-     * Bind the given resource for the given key to the current thread.
+     * Bind the given resource for the given key to the current thread.                     将资源绑定到当前线程上
      * @param key the key to bind the value to (usually the resource factory)
      * @param value the value to bind (usually the active resource object)
      * @throws IllegalStateException if there is already a value bound to the thread
@@ -261,7 +261,7 @@ public abstract class TransactionSynchronizationManager {
     }
 
     /**
-     * Activate transaction synchronization for the current thread.
+     * Activate transaction synchronization for the current thread.                 首先要初始化线程的 事务同步
      * Called by a transaction manager on transaction begin.
      * @throws IllegalStateException if synchronization is already active
      */
