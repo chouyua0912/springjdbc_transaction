@@ -338,7 +338,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
      */
     @Override
     public final TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
-        Object transaction = doGetTransaction();    // 子类的方法
+        Object transaction = doGetTransaction();    // 子类的方法 DataSourceTransactionManager
 
         // Cache debug flag to avoid repeated checks.
         boolean debugEnabled = logger.isDebugEnabled();

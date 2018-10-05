@@ -39,8 +39,8 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.StringUtils;
 
 /**
- * Base class for transactional aspects, such as the {@link TransactionInterceptor}
- * or an AspectJ aspect.
+ * Base class for transactional aspects, such as the {@link TransactionInterceptor}         实现了Spring Transaction的AOP控制逻辑
+ * or an AspectJ aspect.                                                                    不与Aop具体实现的逻辑绑定
  *
  * <p>This enables the underlying Spring transaction infrastructure to be used easily
  * to implement an aspect for any aspect system.
@@ -255,8 +255,8 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 
     /**
-     * General delegate for around-advice-based subclasses, delegating to several other template
-     * methods on this class. Able to handle {@link CallbackPreferringPlatformTransactionManager}
+     * General delegate for around-advice-based subclasses, delegating to several other template        事务操作的Aop Around逻辑
+     * methods on this class. Able to handle {@link CallbackPreferringPlatformTransactionManager}       获取开启事务获取连接，执行数据库操作，提交或回滚事务
      * as well as regular {@link PlatformTransactionManager} implementations.
      * @param method the Method being invoked
      * @param targetClass the target class that we're invoking the method on
@@ -272,7 +272,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
         final PlatformTransactionManager tm = determineTransactionManager(txAttr);
         final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
-        if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {
+        if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {      // 普通的 PlatformTransactionManager
             // Standard transaction demarcation with getTransaction and commit/rollback calls.
             TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);
             Object retVal = null;
