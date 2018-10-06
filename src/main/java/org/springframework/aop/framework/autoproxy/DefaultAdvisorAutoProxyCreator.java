@@ -19,7 +19,7 @@ package org.springframework.aop.framework.autoproxy;
 import org.springframework.beans.factory.BeanNameAware;
 
 /**
- * {@code BeanPostProcessor} implementation that creates AOP proxies based on all
+ * {@code BeanPostProcessor} implementation that creates AOP proxies based on all               查找当前BeanFactory的所有advisor然后匹配生成Aop代理对象
  * candidate {@code Advisor}s in the current {@code BeanFactory}. This class is
  * completely generic; it contains no special code to handle any particular aspects,
  * such as pooling aspects.

@@ -304,12 +304,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
                 }
 
                 // Create bean instance.        创建bean实例
-                if (mbd.isSingleton()) {        // 单例bean
+                if (mbd.isSingleton()) {        // 单例bean           DefaultSingletonBeanRegistry.getSingleton() 封装了获取单例的过程，会注册到earlyCache
                     sharedInstance = getSingleton(beanName, new ObjectFactory<Object>() {
                         @Override
                         public Object getObject() throws BeansException {
                             try {
-                                return createBean(beanName, mbd, args);
+                                return createBean(beanName, mbd, args);     // AbstractAutowireCapableBeanFactory.createBean -> doCreateBean
                             }
                             catch (BeansException ex) {
                                 // Explicitly remove instance from singleton cache: It might have been put there
@@ -861,7 +861,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     }
 
     /**
-     * Return the list of BeanPostProcessors that will get applied
+     * Return the list of BeanPostProcessors that will get applied      注册进来的BeanPostProcessor实例
      * to beans created with this factory.
      */
     public List<BeanPostProcessor> getBeanPostProcessors() {

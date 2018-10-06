@@ -23,7 +23,7 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Factory for AOP proxies for programmatic use, rather than via declarative        编程式创建Aop代理对象时候使用
- * setup in a bean factory. This class provides a simple way of obtaining           设置被代理的target，setTarget
+ * setup in a bean factory. This class provides a simple way of obtaining           设置被代理的target，setTarget 创建成SingletonTargetSource绑定起来
  * and configuring AOP proxy instances in custom user code.                         设置增强addAdvice(advice)   创建代理proxyFactory.getProxy()
  *
  * @author Rod Johnson

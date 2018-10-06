@@ -127,13 +127,13 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 
     /**
-     * Set the given object as target.
+     * Set the given object as target.                          提供的bean参数被封装成TargetSource，单例TargetSource
      * Will create a SingletonTargetSource for the object.
      * @see #setTargetSource
      * @see org.springframework.aop.target.SingletonTargetSource
      */
     public void setTarget(Object target) {
-        setTargetSource(new SingletonTargetSource(target));
+        setTargetSource(new SingletonTargetSource(target));     // 设置的是单例TargetSource
     }
 
     @Override

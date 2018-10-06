@@ -99,7 +99,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 
     /** The configuration used to configure this proxy */
-    protected final AdvisedSupport advised;
+    protected final AdvisedSupport advised;         // 被设置为ProxyFactory或者ProxyFactoryBean？里面包含了TargetSource，比如SingletonTargetSource
 
     protected Object[] constructorArgs;
 
@@ -182,8 +182,8 @@ class CglibAopProxy implements AopProxy, Serializable {
                     enhancer.setUseCache(false);
                 }
             }
-            enhancer.setSuperclass(proxySuperClass);
-            enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));
+            enhancer.setSuperclass(proxySuperClass);                //                      使用CGlib来创建代理对象， 设置超类
+            enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));  // 设置被代理的接口对象
             enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
             enhancer.setStrategy(new ClassLoaderAwareUndeclaredThrowableStrategy(classLoader));
 
@@ -193,12 +193,12 @@ class CglibAopProxy implements AopProxy, Serializable {
                 types[x] = callbacks[x].getClass();
             }
             // fixedInterceptorMap only populated at this point, after getCallbacks call above
-            enhancer.setCallbackFilter(new ProxyCallbackFilter(
+            enhancer.setCallbackFilter(new ProxyCallbackFilter(                 // 设置callbackFilter过滤器
                     this.advised.getConfigurationOnlyCopy(), this.fixedInterceptorMap, this.fixedInterceptorOffset));
             enhancer.setCallbackTypes(types);
 
             // Generate the proxy class and create a proxy instance.
-            return createProxyClassAndInstance(enhancer, callbacks);
+            return createProxyClassAndInstance(enhancer, callbacks);    // 设置追加callback并创建代理对象
         }
         catch (CodeGenerationException ex) {
             throw new AopConfigException("Could not generate CGLIB subclass of class [" +
@@ -218,7 +218,7 @@ class CglibAopProxy implements AopProxy, Serializable {
         }
     }
 
-    protected Object createProxyClassAndInstance(Enhancer enhancer, Callback[] callbacks) {
+    protected Object createProxyClassAndInstance(Enhancer enhancer, Callback[] callbacks) {     // 被子类覆盖了
         enhancer.setInterceptDuringConstruction(false);
         enhancer.setCallbacks(callbacks);
         return (this.constructorArgs != null ?

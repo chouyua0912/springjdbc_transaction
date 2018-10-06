@@ -37,6 +37,9 @@
         <property name="timeout" value="600"/>
     </bean>
 
+    <!--包括transaction-manager默认PlatformTransactionManager-->
+    <!--mode-->
+    <!--proxy-target-class-->
     <tx:annotation-driven/>
 
 </beans>

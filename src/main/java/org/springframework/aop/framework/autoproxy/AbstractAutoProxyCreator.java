@@ -229,16 +229,16 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
     }
 
     @Override
-    public Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
+    public Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {   // 实现了SmartInstantiationAwareBeanPostProcessor 为解决循环依赖
         Object cacheKey = getCacheKey(bean.getClass(), beanName);
         if (!this.earlyProxyReferences.contains(cacheKey)) {
             this.earlyProxyReferences.add(cacheKey);
         }
-        return wrapIfNecessary(bean, beanName, cacheKey);
+        return wrapIfNecessary(bean, beanName, cacheKey);       // getEarlyBeanReference 实现了SmartInstantiationAwareBeanPostProcessor 为解决循环依赖
     }
 
     @Override
-    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {   // 实例化之前进行操作创建代理
         Object cacheKey = getCacheKey(beanClass, beanName);
 
         if (beanName == null || !this.targetSourcedBeans.contains(beanName)) {
@@ -258,7 +258,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
             TargetSource targetSource = getCustomTargetSource(beanClass, beanName);
             if (targetSource != null) {
                 this.targetSourcedBeans.add(beanName);
-                Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);
+                Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);    // postProcessBeforeInstantiation 查找匹配的advice
                 Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);
                 this.proxyTypes.put(cacheKey, proxy.getClass());
                 return proxy;
@@ -295,7 +295,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
         if (bean != null) {
             Object cacheKey = getCacheKey(bean.getClass(), beanName);
             if (!this.earlyProxyReferences.contains(cacheKey)) {
-                return wrapIfNecessary(bean, beanName, cacheKey);
+                return wrapIfNecessary(bean, beanName, cacheKey);               // postProcessAfterInitialization，实例化，初始化已经完成了
             }
         }
         return bean;
@@ -343,7 +343,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
         }
 
         // Create proxy if we have advice.
-        Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
+        Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);  // wrapIfNecessary
         if (specificInterceptors != DO_NOT_PROXY) {
             this.advisedBeans.put(cacheKey, Boolean.TRUE);
             Object proxy = createProxy(
@@ -562,7 +562,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 
     /**
-     * Return whether the given bean is to be proxied, what additional
+     * Return whether the given bean is to be proxied, what additional          子类实现查找匹配的advice逻辑
      * advices (e.g. AOP Alliance interceptors) and advisors to apply.
      * @param beanClass the class of the bean to advise
      * @param beanName the name of the bean

@@ -26,7 +26,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 /**
- * Generic auto proxy creator that builds AOP proxies for specific beans
+ * Generic auto proxy creator that builds AOP proxies for specific beans            自动匹配advisor来创建aop代理
  * based on detected Advisors for each bean.
  *
  * <p>Subclasses must implement the abstract {@link #findCandidateAdvisors()}
@@ -46,8 +46,8 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
  */
 @SuppressWarnings("serial")
 public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyCreator {
-
-    private BeanFactoryAdvisorRetrievalHelper advisorRetrievalHelper;
+            // 实现类是 BeanFactoryAdvisorRetrievalHelperAdapter，继承于工具类，重写了
+    private BeanFactoryAdvisorRetrievalHelper advisorRetrievalHelper;       // 从beanFactory查找advisor的工具类
 
 
     @Override
@@ -57,7 +57,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
             throw new IllegalArgumentException(
                     "AdvisorAutoProxyCreator requires a ConfigurableListableBeanFactory: " + beanFactory);
         }
-        initBeanFactory((ConfigurableListableBeanFactory) beanFactory);
+        initBeanFactory((ConfigurableListableBeanFactory) beanFactory);     // 设置工具类
     }
 
     protected void initBeanFactory(ConfigurableListableBeanFactory beanFactory) {
@@ -89,7 +89,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
         List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
         extendAdvisors(eligibleAdvisors);
         if (!eligibleAdvisors.isEmpty()) {
-            eligibleAdvisors = sortAdvisors(eligibleAdvisors);
+            eligibleAdvisors = sortAdvisors(eligibleAdvisors);  // 把Advice排序
         }
         return eligibleAdvisors;
     }
@@ -106,8 +106,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
      * Search the given candidate Advisors to find all Advisors that
      * can apply to the specified bean.
      * @param candidateAdvisors the candidate Advisors
-     * @param beanClass the target's bean class
-     * @param beanName the target's bean name
+     * @param beanClass the target's bean class         被增强的根据被增强的class来进行匹配
+     * @param beanName the target's bean name           对于PointcutAdvisor和IntroductionAdvisor都有Pointcut classFilter和methodMatcher来进行匹配
      * @return the List of applicable Advisors
      * @see ProxyCreationContext#getCurrentProxiedBeanName()
      */
@@ -116,7 +116,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
         ProxyCreationContext.setCurrentProxiedBeanName(beanName);
         try {
-            return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
+            return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);     // 从工厂获取的所有advisor来看是否有可以用用的
         }
         finally {
             ProxyCreationContext.setCurrentProxiedBeanName(null);
@@ -179,7 +179,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
         }
 
         @Override
-        protected boolean isEligibleBean(String beanName) {
+        protected boolean isEligibleBean(String beanName) {     // 重写了父类的选择逻辑，代理到自己的方法上，被子类覆盖的方法
             return AbstractAdvisorAutoProxyCreator.this.isEligibleAdvisorBean(beanName);
         }
     }
