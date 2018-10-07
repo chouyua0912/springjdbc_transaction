@@ -106,7 +106,7 @@ public class ProxyFactory extends ProxyCreatorSupport {         // 实现了Advi
      * @return the proxy object
      */
     public Object getProxy(ClassLoader classLoader) {
-        return createAopProxy().getProxy(classLoader);
+        return createAopProxy().getProxy(classLoader);      // 通过DefaultAopProxyFactory工厂创建AopProxy，绑定到具体的Aop框架上
     }
 
 

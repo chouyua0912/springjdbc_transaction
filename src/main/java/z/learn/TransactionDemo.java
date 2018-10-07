@@ -14,6 +14,7 @@ public class TransactionDemo {
         //  execute(() -> update1.insert1());
         //  execute(() -> update1.insert1_1());
         //  execute(() -> update1.insert2());
+        update1.insert1();
         execute(() -> update1.insert3());
 
         jdbc.query("select * from jdbc", rs -> {

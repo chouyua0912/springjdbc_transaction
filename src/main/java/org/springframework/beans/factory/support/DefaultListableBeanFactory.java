@@ -1044,7 +1044,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         return null;
     }
 
-    @Override
+    @Override       // 解决依赖
     public Object resolveDependency(DependencyDescriptor descriptor, String requestingBeanName,
                                     Set<String> autowiredBeanNames, TypeConverter typeConverter) throws BeansException {
 

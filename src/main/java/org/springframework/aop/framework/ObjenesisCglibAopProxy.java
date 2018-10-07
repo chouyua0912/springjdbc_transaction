@@ -78,7 +78,7 @@ class ObjenesisCglibAopProxy extends CglibAopProxy {
             }
         }
 
-        ((Factory) proxyInstance).setCallbacks(callbacks);
+        ((Factory) proxyInstance).setCallbacks(callbacks);      // 只设置了Callback数组属性，没有设置被代理bean原本的其他属性
         return proxyInstance;
     }
 
