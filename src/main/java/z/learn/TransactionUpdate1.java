@@ -1,5 +1,6 @@
 package z.learn;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import javax.annotation.Resource;
  * TransactionAspectSupport 使用 PlatformTransactionManager 获取了 TransactionStatus 封装成 TransactionInfo
  */
 @Component
-public class TransactionUpdate1 {
+public class TransactionUpdate1 implements InitializingBean {
 
     // JdbcTemplate will get connection from datasource directly, and has no automatic transaction control
     public void insert1() {
@@ -80,4 +81,10 @@ public class TransactionUpdate1 {
     private TransactionTemplate transactionTemplate;
     @Resource
     private TransactionUpdate2 update2;
+    private Integer count;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        count = Integer.valueOf(150);
+    }
 }
