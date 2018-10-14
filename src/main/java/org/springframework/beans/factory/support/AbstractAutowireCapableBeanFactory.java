@@ -550,9 +550,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // Initialize the bean instance.
         Object exposedObject = bean;
         try {
-            populateBean(beanName, mbd, instanceWrapper);           // 注入（设置）属性
+            populateBean(beanName, mbd, instanceWrapper);                       // 注入（设置）属性，此时会注入依赖
             if (exposedObject != null) {
-                exposedObject = initializeBean(beanName, exposedObject, mbd);   // 初始化bean  doCreateBean
+                exposedObject = initializeBean(beanName, exposedObject, mbd);   // 初始化bean，执行initializeBean接口，@PostConstruct注解 (doCreateBean方法内调用)
             }
         }
         catch (Throwable ex) {
@@ -1264,7 +1264,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (hasInstAwareBpps) {
                 for (BeanPostProcessor bp : getBeanPostProcessors()) {
                     if (bp instanceof InstantiationAwareBeanPostProcessor) {
-                        InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
+                        InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;         // CommonAnnotationBeanPostProcessor解决注入
                         pvs = ibp.postProcessPropertyValues(pvs, filteredPds, bw.getWrappedInstance(), beanName);   // 对value值进行Post处理
                         if (pvs == null) {
                             return;
@@ -1614,7 +1614,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }, getAccessControlContext());
         }
         else {
-            invokeAwareMethods(beanName, bean);
+            invokeAwareMethods(beanName, bean);         // bean如果实现了各种aware接口，先调用设置
         }
 
         Object wrappedBean = bean;
@@ -1623,7 +1623,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         try {
-            invokeInitMethods(beanName, wrappedBean, mbd);                          // TODO InitializingBean，init注解 调用初始化方法
+            invokeInitMethods(beanName, wrappedBean, mbd);                          /** InitializingBean，@PostConstruct注解 调用初始化方法 **/
         }
         catch (Throwable ex) {
             throw new BeanCreationException(
@@ -1631,7 +1631,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                     beanName, "Invocation of init method failed", ex);
         }
         if (mbd == null || !mbd.isSynthetic()) {
-            wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);    // BeanPostProcessor 初始化之后调用
+            wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);    // BeanPostProcessor 初始化之后调用  Aop的增强点，生成代理对象
         }
         return wrappedBean;
     }

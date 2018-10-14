@@ -52,10 +52,10 @@ public abstract class AopNamespaceUtils {
     private static final String EXPOSE_PROXY_ATTRIBUTE = "expose-proxy";
 
 
-    public static void registerAutoProxyCreatorIfNecessary(
+    public static void registerAutoProxyCreatorIfNecessary(     // AnnotationDrivenBeanDefinitionParser.parse->configureAutoProxyCreator
             ParserContext parserContext, Element sourceElement) {
 
-        BeanDefinition beanDefinition = AopConfigUtils.registerAutoProxyCreatorIfNecessary(     // 注册InternalAutoProxyCreator
+        BeanDefinition beanDefinition = AopConfigUtils.registerAutoProxyCreatorIfNecessary(     // 注册InternalAutoProxyCreator,InfrastructureAdvisorAutoProxyCreator
                 parserContext.getRegistry(), parserContext.extractSource(sourceElement));
         useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
         registerComponentIfNecessary(beanDefinition, parserContext);
@@ -70,10 +70,10 @@ public abstract class AopNamespaceUtils {
         registerComponentIfNecessary(beanDefinition, parserContext);
     }
 
-    public static void registerAspectJAnnotationAutoProxyCreatorIfNecessary(
+    public static void registerAspectJAnnotationAutoProxyCreatorIfNecessary(    // AspectJAutoProxyBeanDefinitionParser.parse
             ParserContext parserContext, Element sourceElement) {
 
-        BeanDefinition beanDefinition = AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(
+        BeanDefinition beanDefinition = AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(    // 注册AnnotationAwareAspectJAutoProxyCreator
                 parserContext.getRegistry(), parserContext.extractSource(sourceElement));
         useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
         registerComponentIfNecessary(beanDefinition, parserContext);

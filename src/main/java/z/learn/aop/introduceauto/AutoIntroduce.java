@@ -11,7 +11,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import z.learn.aop.SayHello;
 
-public class AutoIntroduce extends DelegatingIntroductionInterceptor implements BeanPostProcessor, IntroductionInterceptor, SayHello {
+public class AutoIntroduce extends DelegatingIntroductionInterceptor implements BeanPostProcessor, SayHello {
 
     public AutoIntroduce() {
         super();

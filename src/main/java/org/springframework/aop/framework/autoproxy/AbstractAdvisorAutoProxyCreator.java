@@ -67,11 +67,11 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
     @Override
     protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName, TargetSource targetSource) {
-        List<Advisor> advisors = findEligibleAdvisors(beanClass, beanName);
+        List<Advisor> advisors = findEligibleAdvisors(beanClass, beanName);     // 查找匹配的advisors，根据Pointcut来匹配，没有Pointcut的时候都匹配
         if (advisors.isEmpty()) {
             return DO_NOT_PROXY;
         }
-        return advisors.toArray();
+        return advisors.toArray();          // 查找到匹配的advisor，可以进一步进行增强
     }
 
     /**
@@ -85,8 +85,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
      * @see #extendAdvisors
      */
     protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
-        List<Advisor> candidateAdvisors = findCandidateAdvisors();
-        List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
+        List<Advisor> candidateAdvisors = findCandidateAdvisors();                      // 查找工厂内所有的advisor
+        List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);  // 直接通过advisor里面绑定的Pointcut来匹配，使用工具类封装流程
         extendAdvisors(eligibleAdvisors);
         if (!eligibleAdvisors.isEmpty()) {
             eligibleAdvisors = sortAdvisors(eligibleAdvisors);  // 把Advice排序
@@ -98,8 +98,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
      * Find all candidate Advisors to use in auto-proxying.
      * @return the List of candidate Advisors
      */
-    protected List<Advisor> findCandidateAdvisors() {
-        return this.advisorRetrievalHelper.findAdvisorBeans();
+    protected List<Advisor> findCandidateAdvisors() {           // BeanFactoryAdvisorRetrievalHelper->BeanFactoryAdvisorRetrievalHelperAdapter
+        return this.advisorRetrievalHelper.findAdvisorBeans();  // 覆盖了父类的方法isEligibleBean(String beanName)，子类可以实现自己的匹配逻辑
     }
 
     /**

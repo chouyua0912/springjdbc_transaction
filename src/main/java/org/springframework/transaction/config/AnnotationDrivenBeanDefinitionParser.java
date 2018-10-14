@@ -101,7 +101,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
     private static class AopAutoProxyConfigurer {
 
         public static void configureAutoProxyCreator(Element element, ParserContext parserContext) {
-            AopNamespaceUtils.registerAutoProxyCreatorIfNecessary(parserContext, element);      /**!!注册InternalAutoProxyCreator InfrastructureAdvisorAutoProxyCreator **/
+            AopNamespaceUtils.registerAutoProxyCreatorIfNecessary(parserContext, element);      /**!!注册 InternalAutoProxyCreator InfrastructureAdvisorAutoProxyCreator **/
 
             String txAdvisorBeanName = TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME;
             if (!parserContext.getRegistry().containsBeanDefinition(txAdvisorBeanName)) {

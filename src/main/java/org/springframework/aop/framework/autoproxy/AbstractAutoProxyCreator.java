@@ -50,8 +50,8 @@ import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostP
 import org.springframework.util.StringUtils;
 
 /**
- * {@link org.springframework.beans.factory.config.BeanPostProcessor} implementation
- * that wraps each eligible bean with an AOP proxy, delegating to specified interceptors
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor} implementation            实现了BeanPostProcessor，接入容器中，在对象生命周期中进行加工
+ * that wraps each eligible bean with an AOP proxy, delegating to specified interceptors        封装了创建代理bean的流程
  * before invoking the bean itself.
  *
  * <p>This class distinguishes between "common" interceptors: shared for all proxies it
@@ -67,8 +67,8 @@ import org.springframework.util.StringUtils;
  * Instead of x repetitive proxy definitions for x target beans, you can register
  * one single such post processor with the bean factory to achieve the same effect.
  *
- * <p>Subclasses can apply any strategy to decide if a bean is to be proxied, e.g. by type,
- * by name, by definition details, etc. They can also return additional interceptors that
+ * <p>Subclasses can apply any strategy to decide if a bean is to be proxied, e.g. by type,     子类实现某个bean是否需要被代理的策略
+ * by name, by definition details, etc. They can also return additional interceptors that       比如根据bean类型，bean名字，bean定义
  * should just be applied to the specific bean instance. A simple concrete implementation is
  * {@link BeanNameAutoProxyCreator}, identifying the beans to be proxied via given names.
  *
@@ -76,7 +76,7 @@ import org.springframework.util.StringUtils;
  * a custom target source: for example, to pool prototype objects. Auto-proxying will
  * occur even if there is no advice, as long as a TargetSourceCreator specifies a custom
  * {@link org.springframework.aop.TargetSource}. If there are no TargetSourceCreators set,
- * or if none matches, a {@link org.springframework.aop.target.SingletonTargetSource}
+ * or if none matches, a {@link org.springframework.aop.target.SingletonTargetSource}           默认使用单例Singleton TargetSource
  * will be used by default to wrap the target bean instance.
  *
  * @author Juergen Hoeller
@@ -259,7 +259,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
             if (targetSource != null) {
                 this.targetSourcedBeans.add(beanName);
                 Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);    // postProcessBeforeInstantiation 查找匹配的advice
-                Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);
+                Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);    // postProcessBeforeInstantiation
                 this.proxyTypes.put(cacheKey, proxy.getClass());
                 return proxy;
             }
@@ -343,11 +343,11 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
         }
 
         // Create proxy if we have advice.
-        Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);  // wrapIfNecessary
-        if (specificInterceptors != DO_NOT_PROXY) {
+        Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);  // wrapIfNecessary 子类实现的筛选策略
+        if (specificInterceptors != DO_NOT_PROXY) {         // 找到匹配的Advisor，进行增强
             this.advisedBeans.put(cacheKey, Boolean.TRUE);
-            Object proxy = createProxy(
-                    bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
+            Object proxy = createProxy(         // wrapIfNecessary 把raw bean实例先封装成 SingletonTargetSource
+                    bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));  // 默认使用SingletonTargetSource
             this.proxyTypes.put(cacheKey, proxy.getClass());
             return proxy;
         }
@@ -424,7 +424,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
     }
 
     /**
-     * Create an AOP proxy for the given bean.
+     * Create an AOP proxy for the given bean.                      编程式创建Aop代理对象,把传入的advisors织入到targetSource
      * @param beanClass the class of the bean
      * @param beanName the name of the bean
      * @param specificInterceptors the set of interceptors that is
@@ -441,8 +441,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
             AutoProxyUtils.exposeTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName, beanClass);
         }
 
-        ProxyFactory proxyFactory = new ProxyFactory();
-        proxyFactory.copyFrom(this);
+        ProxyFactory proxyFactory = new ProxyFactory();             // 通过编程式的ProxyFactory工厂来创建Aop代理对象
+        proxyFactory.copyFrom(this);                          // 复制配置
 
         if (!proxyFactory.isProxyTargetClass()) {
             if (shouldProxyTargetClass(beanClass, beanName)) {
@@ -454,16 +454,16 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
         }
 
         Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
-        proxyFactory.addAdvisors(advisors);
-        proxyFactory.setTargetSource(targetSource);
-        customizeProxyFactory(proxyFactory);
+        proxyFactory.addAdvisors(advisors);             // 绑定advisors
+        proxyFactory.setTargetSource(targetSource);     // 设置被代理对象
+        customizeProxyFactory(proxyFactory);            // 留给子类扩展
 
         proxyFactory.setFrozen(this.freezeProxy);
         if (advisorsPreFiltered()) {
             proxyFactory.setPreFiltered(true);
         }
 
-        return proxyFactory.getProxy(getProxyClassLoader());
+        return proxyFactory.getProxy(getProxyClassLoader());    // 创建代理对象返回
     }
 
     /**
@@ -577,7 +577,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
      * @see #DO_NOT_PROXY
      * @see #PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS
      */
-    protected abstract Object[] getAdvicesAndAdvisorsForBean(
+    protected abstract Object[] getAdvicesAndAdvisorsForBean(               // 留给子类实现的策略
             Class<?> beanClass, String beanName, TargetSource customTargetSource) throws BeansException;
 
 }
